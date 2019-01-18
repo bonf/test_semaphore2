@@ -28,23 +28,17 @@ blocks:
           - checkout
           - echo "make smoke"
 
-  - name: "Unit tests"
+  - name: "Tests"
     task:
+      prologue:
+        commands:
+          - sem-version ruby 2.5.1
       jobs:
       - name: Test
         commands:
           - checkout
           - rails test
 
-      - name: Lint code
-        commands:
-          - checkout
-          - echo "make lint"
-
-      - name: Check security
-        commands:
-          - checkout
-          - echo "make security"
 
   - name: "Integration tests"
     task:
