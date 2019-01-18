@@ -31,10 +31,10 @@ blocks:
   - name: "Unit tests"
     task:
       jobs:
-      - name: RSpec
+      - name: Test
         commands:
           - checkout
-          - echo "make rspec"
+          - echo "rails test"
 
       - name: Lint code
         commands:
