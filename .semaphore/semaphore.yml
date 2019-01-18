@@ -20,21 +20,18 @@ blocks:
           - echo "Docker build..."
           - echo "done"
 
-  - name: "Smoke tests"
+  - name: "bundle"
     task:
       jobs:
-      - name: Smoke
+      - name: bundle
         commands:
           - checkout
-          - echo "make smoke"
+          - sem-version ruby 2.5.1
+          - bundle install --deployment --path vendor/bundle
+
 
   - name: "Tests"
     task:
-      prologue:
-        commands:
-          - sem-version ruby 2.5.1
-          - bundle install --deployment --path vendor/bundle
-          - nvm install 8.9.4 && nvm use 8.9.4
       jobs:
       - name: Test
         commands:
