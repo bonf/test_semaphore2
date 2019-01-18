@@ -40,13 +40,13 @@ blocks:
           - rails test
 
 
-  - name: "Integration tests"
-    task:
-      jobs:
-      - name: Cucumber
-        commands:
-          - checkout
-          - echo "make cucumber"
+  # - name: "Integration tests"
+  #   task:
+  #     jobs:
+  #     - name: Cucumber
+  #       commands:
+  #         - checkout
+  #         - echo "make cucumber"
 
   - name: "Push Image"
     task:
