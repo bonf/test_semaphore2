@@ -34,7 +34,7 @@ blocks:
       - name: Test
         commands:
           - checkout
-          - echo "rails test"
+          - rails test
 
       - name: Lint code
         commands:
