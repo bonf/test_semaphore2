@@ -33,6 +33,8 @@ blocks:
       prologue:
         commands:
           - sem-version ruby 2.5.1
+          - bundle install --deployment --path vendor/bundle
+          - nvm install 8.9.4 && nvm use 8.9.4
       jobs:
       - name: Test
         commands:
