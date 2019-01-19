@@ -33,11 +33,19 @@ blocks:
 
   - name: Tests
     task:
+      env_vars:
+        # Matches the configuration used in sem-service
+        - name: DATABASE_URL
+          value: postgresql://postgres@localhost/test?encoding=utf8
+        - name: RAILS_ENV
+          value: test
       prologue:
         commands:
           - checkout
           - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock)
           - sem-service start postgres
+          # Clear existing config/database.yml
+          - cat /dev/null > config/database.yml
           - bundle install --deployment --path vendor/bundle
           - bundle exec rake db:setup
       jobs:
