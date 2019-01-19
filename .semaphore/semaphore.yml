@@ -44,15 +44,6 @@ blocks:
             - bundle exec rails test
 
 
-  - name: "Push Image"
-    task:
-      jobs:
-      - name: Push
-        commands:
-          - checkout
-          - echo "make docker.push"
-
-
 promotions:
   - name: Deploy to Heroku Staging
     pipeline_file: heroku_staging.yml
