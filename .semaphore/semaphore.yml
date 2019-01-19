@@ -20,23 +20,28 @@ blocks:
           - echo "Docker build..."
           - echo "done"
 
-  - name: "bundle"
+  - name: Ruby dependencies
     task:
       jobs:
-      - name: bundle
+        - name: cache bundle
+          commands:
+            - checkout
+            - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH,gems-master
+            - bundle install --deployment --path vendor/bundle
+            - cache store gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock) vendor/bundle
+
+
+  - name: Tests
+    task:
+      prologue:
         commands:
           - checkout
-          - sem-version ruby 2.5.1
+          - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock)
           - bundle install --deployment --path vendor/bundle
-
-
-  - name: "Tests"
-    task:
       jobs:
-      - name: Test
-        commands:
-          - checkout
-          - bundle exec rails test
+        - name: Test all the things
+          commands:
+            - bundle exec rails test
 
 
   - name: "Push Image"
