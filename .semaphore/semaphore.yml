@@ -62,7 +62,7 @@ promotions:
         branch:
           - "^master$"
 
-promotions:
+
   - name: Deploy to Heroku Production
     pipeline_file: heroku_prod.yml
     auto_promote_on:
