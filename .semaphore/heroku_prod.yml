@@ -16,6 +16,6 @@ blocks:
         commands:
           - checkout
           - ls -1
-          - echo "Dockeying to Staging ..."
+          - echo "Deploying to Production ..."
           - echo "done"
 
