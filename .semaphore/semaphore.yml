@@ -36,16 +36,8 @@ blocks:
       - name: Test
         commands:
           - checkout
-          - rails test
+          - bundle exec rails test
 
-
-  # - name: "Integration tests"
-  #   task:
-  #     jobs:
-  #     - name: Cucumber
-  #       commands:
-  #         - checkout
-  #         - echo "make cucumber"
 
   - name: "Push Image"
     task:
@@ -54,3 +46,20 @@ blocks:
         commands:
           - checkout
           - echo "make docker.push"
+
+
+promotions:
+  - name: Deploy to Heroku Staging
+    pipeline_file: heroku_staging.yml
+    auto_promote_on:
+      - result: passed
+        branch:
+          - "^master$"
+
+promotions:
+  - name: Deploy to Heroku Production
+    pipeline_file: heroku_prod.yml
+    auto_promote_on:
+      - result: passed
+        branch:
+          - "^production$"
