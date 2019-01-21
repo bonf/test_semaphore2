@@ -8,14 +8,20 @@ agent:
 blocks:
   - name: "Build"
     task:
+      secrets:
+        - name: sem2-heroku
       env_vars:
+        - name: HEROKU_REMOTE
+          value: https://git.heroku.com/sem2.git
         - name: APP_ENV
           value: staging
       jobs:
       - name: Deploy
         commands:
           - checkout
-          - ls -1
-          - echo "Deploying to Staging ..."
-          - echo "done"
-
+          - ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
+          - chmod 600 ~/.ssh/id_rsa_semaphore_heroku
+          - ssh-add ~/.ssh/id_rsa_semaphore_heroku
+          - git config --global url.ssh://git@heroku.com/.insteadOf https://git.heroku.com/
+          - git remote add heroku $HEROKU_REMOTE
+          - git push heroku -f $SEMAPHORE_GIT_BRANCH:master
