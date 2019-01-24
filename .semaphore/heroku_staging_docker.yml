@@ -10,6 +10,7 @@ blocks:
     task:
       secrets:
         - name: sem2-heroku
+        - name: hero_api_key
       env_vars:
         - name: HEROKU_REMOTE
           value: https://git.heroku.com/sem2.git
@@ -21,6 +22,7 @@ blocks:
           - checkout
           - sem-version node 10.14.1
           - npm install -g heroku
+          - . /tmp/heroku_cli_config
           - heroku config -a sem2
 
 
