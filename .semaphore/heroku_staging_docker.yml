@@ -12,6 +12,8 @@ blocks:
         - name: sem2-heroku
         - name: hero_api_key
       env_vars:
+        - name: HEROKU_APPNAME
+          value: sem2
         - name: HEROKU_REMOTE
           value: https://git.heroku.com/sem2.git
         - name: APP_ENV
@@ -20,10 +22,22 @@ blocks:
       - name: Deploy
         commands:
           - checkout
+          - sem-version ruby 2.5.1
           - sem-version node 10.14.1
           - npm install -g heroku
+
+          # Assets
+          - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH,gems-master
+          - bundle install --deployment --path vendor/bundle
+          - RAILS_ENV=production rails assets:precompile
+
+
+          # sets HEROKU_API_KEY
           - . /tmp/heroku_cli_config
-          - heroku config -a sem2
+
+          # Deploy containers
+          - heroku container:push web release --recursive -a $HEROKU_APPNAME
+          - heroku container:release web release -a $HEROKU_APPNAME
 
 
           # - ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
