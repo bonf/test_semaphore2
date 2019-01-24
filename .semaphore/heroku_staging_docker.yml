@@ -1,0 +1,32 @@
+version: v1.0
+name: Deploy to Heroku Staging via Docker
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: "Build"
+    task:
+      secrets:
+        - name: sem2-heroku
+      env_vars:
+        - name: HEROKU_REMOTE
+          value: https://git.heroku.com/sem2.git
+        - name: APP_ENV
+          value: staging
+      jobs:
+      - name: Deploy
+        commands:
+          - checkout
+          - sem-version node 10.14.1
+          - npm install -g heroku
+          - heroku config -a sem2
+
+
+          # - ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
+          # - chmod 600 ~/.ssh/id_rsa_semaphore_heroku
+          # - ssh-add ~/.ssh/id_rsa_semaphore_heroku
+          # - git config --global url.ssh://git@heroku.com/.insteadOf https://git.heroku.com/
+          # - git remote add heroku $HEROKU_REMOTE
+          # - git push heroku -f $SEMAPHORE_GIT_BRANCH:master

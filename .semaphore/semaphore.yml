@@ -51,12 +51,12 @@ blocks:
       jobs:
         - name: Test all the things
           commands:
-            - bundle exec rails test
+            - echo bundle exec rails test
 
 
 promotions:
   - name: Deploy to Heroku Staging
-    pipeline_file: heroku_staging.yml
+    pipeline_file: heroku_staging_docker.yml
     auto_promote_on:
       - result: passed
         branch:
