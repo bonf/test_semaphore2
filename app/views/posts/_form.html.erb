@@ -12,6 +12,11 @@
   <% end %>
 
   <div class="field">
+    <%= form.label :author %>
+    <%= form.text_field :author, id: :post_title %>
+  </div>
+
+  <div class="field">
     <%= form.label :title %>
     <%= form.text_field :title, id: :post_title %>
   </div>
