@@ -6,12 +6,14 @@ COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 RUN bundle install
 COPY . /app
+COPY start_web.sh /app
 
 # Add a script to be executed every time the container starts.
-COPY entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
-EXPOSE 3000
+#COPY entrypoint.sh /usr/bin/
+#RUN chmod +x /usr/bin/entrypoint.sh
+#ENTRYPOINT ["entrypoint.sh"]
+
+EXPOSE $PORT
 
 # Start the main process.
-CMD ["rm -f /myapp/tmp/pids/server.pid &&", "rails", "server", "-b", "0.0.0.0:$PORT"]
+CMD ["/app/start_web.sh"]
