@@ -36,6 +36,7 @@ blocks:
           - . /tmp/heroku_cli_config
 
           # Deploy containers
+          - heroku container:login
           - heroku container:push web release --recursive -a $HEROKU_APPNAME
           - heroku container:release web release -a $HEROKU_APPNAME
 
