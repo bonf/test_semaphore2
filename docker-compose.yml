@@ -1,17 +1,54 @@
 version: '3'
 services:
   db:
-    image: postgres
+    image: postgres:9.6.11-alpine
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
-  webw:
-    build:
-      context: .
-      dockerfile: Dockerfile.web
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - ./tmp/redis:/data
+
+  web:
+    build: .
+    image: peppino
+    #command: start_web.sh
+    #command: /bin/bash -c "bundle exec rails s -b 0.0.0.0"
+    #command: ping db
     volumes:
       - .:/app
+      - ./tmp/bundle:/usr/local/bundle
+      - ./tmp/node_modules:/app/node_modules
     ports:
-      - "3000:3000"
+      - "3005:3000"
+    links:
+      - db
+      - redis
+    env_file:
+      - .web.env
     depends_on:
       - db
+
+
+  sidekiq:
+    image: peppino
+    command: bundle exec sidekiq
+    volumes:
+      - .:/app
+      - ./tmp/bundle:/usr/local/bundle
+    ports: []
+    env_file:
+      - .web.env
+    links:
+      - db
+      - redis
+
+  webpacker:
+    image: peppino
+    command: echo "WEBPACK"
+    volumes:
+      - .:/app
+      - ./tmp/node_modules:/app/node_modules
+    ports:
+      - 3035:3035
